@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+apply plugin: "java"
+apply plugin: "com.github.johnrengelman.shadow"
+
+group 'org.example'
+version '0.0.2'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.google.guava:guava:31.1-jre")
+    implementation project (':hw01-gradle')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+/*
+afterEvalute {
+    compileJava {
+        inputs.property('moduleName',moduleName)
+        doFirst {
+            options.ompilerArgs=[
+                '--module-path', classpath.asPath
+            ]
+            classpath = files();
+        }
+    }
+}
+*/
+
+shadowJar {
+    archiveBaseName.set('fat-jar-file')
+    archiveVersion.set('0.0.2')
+    archiveClassifier.set('')
+    manifest {
+        attributes (
+                //'Class-Path': 'build/libs/fat-jar-file-0.0.2.jar',
+                'Main-Class': 'ru.otus.homework.Main'
+        )
+
+    }
+}
+
+
+tasks.build.dependsOn tasks.shadowJar
+
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(JavaCompile) {
+    options.with {
+        encoding = 'UTF-8'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,6 @@
+rootProject.name = 'otus-homework-gradle'
+//include 'homeworkgradle.hw01gradle.main'
+include 'hw01-gradle'
+//include 'src:main:hw01-gradle'
+//findProject(':src:main:hw01-gradle')?.name = 'hw01-gradle'
+
