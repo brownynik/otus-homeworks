@@ -15,7 +15,7 @@ public class HelloOtus {
         buf.add("знаю");
         buf.add("про");
         buf.add("Java");
-        buf.add((String) null);
+        buf.add(null);
         buf.add("?");
         buf.add("Правильно!");
         buf.add("Ничего!");
@@ -28,7 +28,7 @@ public class HelloOtus {
         }
         sbResult.replace(sbResult.length()-2,sbResult.length(),"");
 
-        System.out.println("Without Guava Variant: " + sbResult.toString());
+        System.out.println("Without Guava Variant: " + sbResult);
         System.out.println("With Guava Variant: " + Joiner.on(", ").skipNulls().join(buf));
 
     }

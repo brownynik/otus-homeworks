@@ -44,7 +44,9 @@ replay_pid*
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
-
+.gradle/*
+.idea/*
+./build/tmp/*
 
 #bak file
 *.bak
