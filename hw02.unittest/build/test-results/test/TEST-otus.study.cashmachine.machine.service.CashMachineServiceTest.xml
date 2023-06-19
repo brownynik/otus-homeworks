@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="otus.study.cashmachine.machine.service.CashMachineServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-06-19T17:48:25" hostname="COMP-01-WIN7" time="2.072">
+  <properties/>
+  <testcase name="changePinWithAnswer()" classname="otus.study.cashmachine.machine.service.CashMachineServiceTest" time="2.001"/>
+  <testcase name="checkBalance()" classname="otus.study.cashmachine.machine.service.CashMachineServiceTest" time="0.011"/>
+  <testcase name="changePin()" classname="otus.study.cashmachine.machine.service.CashMachineServiceTest" time="0.033"/>
+  <testcase name="putMoney()" classname="otus.study.cashmachine.machine.service.CashMachineServiceTest" time="0.01"/>
+  <testcase name="getMoney()" classname="otus.study.cashmachine.machine.service.CashMachineServiceTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
