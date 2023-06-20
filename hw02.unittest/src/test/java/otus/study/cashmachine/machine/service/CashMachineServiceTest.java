@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import otus.study.cashmachine.TestUtil;
@@ -50,9 +51,6 @@ class CashMachineServiceTest {
     @BeforeEach
     void init() {
         cashMachineService = new CashMachineServiceImpl(cardService, accountService, moneyBoxService);
-        //cardService.createCard("5410501",1L,"123");
-        //System.out.println(cardService);
-
     }
 
 
@@ -78,13 +76,10 @@ class CashMachineServiceTest {
         int intNote1000 = mBox.getNote1000();
         int intNote5000 = mBox.getNote5000();
 
-        // Account acc = new Account(1L, BigDecimal.valueOf(10000));
         Card card = new Card(1000L, "5410501", 1L, TestUtil.getHash("1234"));
         when(cardsDao.getCardByNumber("5410501")).thenReturn(card);
         when(cardService.getMoney("5410501","1234", checkedSumm)).thenReturn(checkedSumm);
         when(moneyBoxService.getMoney(mBox, checkedSumm.intValue())).thenReturn(Arrays.asList(intNote5000,intNote1000,intNote500,intNote100));
-        //when(accountService.getMoney(1L,BigDecimal.valueOf(15000))).thenReturn(BigDecimal.valueOf(15000));
-
 
         List <Integer> amount =  cashMachineService.getMoney(cashMachine,"5410501","1234",checkedSumm);
 
@@ -103,18 +98,8 @@ class CashMachineServiceTest {
             i++;
         }
 
-
         assertEquals(noteCount, mBox.getNote100() + mBox.getNote500() + mBox.getNote1000() + mBox.getNote5000(),
                 "cashMachineService.getMoney вернул некорректное число купюр");
-
-
-
-
-        /*
-        System.out.println("Amount.Size = " + amount.size());
-        System.out.println("noteCount = " + noteCount);
-        System.out.println("resultAmount = " + resultAmount);
-        */
 
     }
 
@@ -166,13 +151,9 @@ class CashMachineServiceTest {
         Card card = new Card(1000L, "5410501", 1L, TestUtil.getHash("1234"));
         when(cardsDao.getCardByNumber("5410501")).thenReturn(card);
         when(cardService.getBalance("5410501","1234")).thenReturn(checkedSumm);
-        //when(accountService.putMoney(1L, BigDecimal.valueOf(16600))).thenReturn(checkedSumm);
 
         BigDecimal balance = cashMachineService.checkBalance(cashMachine,"5410501","1234");
-
         assertEquals(balance, checkedSumm, "Некорректно определён баланс счёта");
-
-        // System.out.println("Balance = " + balance);
     }
 
     @Test
@@ -184,25 +165,17 @@ class CashMachineServiceTest {
 
         ArgumentCaptor<Card> CardCaptor = ArgumentCaptor.forClass(Card.class);
         when(cardsDao.getCardByNumber(eq("5410501"))).thenReturn(spyCard);
-        // when(cardsDao.saveCard(CardCaptor.capture())).then(returnsFirstArg());
+        // эквивалент строки ниже, в данном случае. when(cardsDao.saveCard(CardCaptor.capture())).then(returnsFirstArg());
         when(cardsDao.saveCard(CardCaptor.capture())).thenReturn(spyCard);
 
-
         boolean isChangedPin = cashMachineService.changePin("5410501","1234","5678");
-
-
-
         assertTrue(CardCaptor.getValue().getPinCode().equals(TestUtil.getHash("5678")),"Ошибка изменения пин кода");
-
 
         // Проверяем, что если не указать карту, будет поднято определённое исключение
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> {
             cardService.cnangePin(null, "1234", "5678");
         });
         assertEquals(thrown.getMessage(), "No card found");
-
-
-
     }
 
     @Test
@@ -213,8 +186,27 @@ class CashMachineServiceTest {
 
         when(cardsDao.getCardByNumber(eq("5410501"))).thenReturn(spyCard);
         when(cardsDao.saveCard(any())).thenAnswer(accountDao -> accountDao.getArguments()[0]);
-        when(cardService.cnangePin("5410501", "1234", "5678")).thenAnswer(cardService->spyCard.getPinCode().equals(TestUtil.getHash("5678")));
 
+
+        /*
+
+        Извините за комментарии в коде, но, как я понимаю, thenReturn принимает тип, возвращаемый методом "мокаемого" класса (очевидно, представлен как wildcard T value - то есть любой тип),
+        а thenAnswer принимает дженерик интерфейса Answer - то есть, по сути, просит предоставить анонимный класс с переопределённым методом answer,
+        который, в свою очередь, возвращает тип, возвращаемый методом "мокаемого" класса?
+
+        И чтобы не писать вот такую обёртку...
+
+        Answer an = new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return spyCard.getPinCode().equals(TestUtil.getHash("5678"));
+            }
+        };
+
+        .. можно просто переписать на лямбду
+        */
+
+        when(cardService.cnangePin("5410501", "1234", "5678")).thenAnswer(i->spyCard.getPinCode().equals(TestUtil.getHash("5678")));
         boolean isChangedPin = cashMachineService.changePin("5410501","1234","5678");
 
         assertEquals(spyCard.getPinCode(), TestUtil.getHash("5678"), "Ошибка изменения пин кода");

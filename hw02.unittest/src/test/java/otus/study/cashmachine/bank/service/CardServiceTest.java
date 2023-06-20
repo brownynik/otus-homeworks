@@ -74,7 +74,6 @@ public class CardServiceTest {
                     cardService.getMoney("1111", "2222", BigDecimal.ONE);
         });
 
-
     }
 
     @Test
@@ -117,7 +116,6 @@ public class CardServiceTest {
 
         assertTrue(CardCaptor.getValue().getPinCode().equals(TestUtil.getHash("5678")),"Ошибка изменения пин кода");
 
-
         Exception thrown = assertThrows(IllegalArgumentException.class, () -> {
             cardService.cnangePin(null, "1234", "5678");
         });
@@ -125,9 +123,5 @@ public class CardServiceTest {
 
         // System.out.println("isChangedPin = " + isChangedPin);
         // System.out.println("CardCaptor.getValue().getPinCode() = " + CardCaptor.getValue().getPinCode().equals(TestUtil.getHash("5678")));
-
-
-
-
     }
 }
