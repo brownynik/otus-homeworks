@@ -92,7 +92,7 @@ class CashMachineServiceTest {
         m.put(2, BigDecimal.valueOf(500));
         m.put(3, BigDecimal.valueOf(100));
 
-        for(Integer e:amount) {
+        for (Integer e:amount) {
             noteCount+= e.intValue();
             resultAmount = resultAmount.add(m.get(i).multiply(BigDecimal.valueOf(e)));
             i++;
@@ -206,7 +206,7 @@ class CashMachineServiceTest {
         .. можно просто переписать на лямбду
         */
 
-        when(cardService.cnangePin("5410501", "1234", "5678")).thenAnswer(i->spyCard.getPinCode().equals(TestUtil.getHash("5678")));
+        when(cardService.cnangePin("5410501", "1234", "5678")).thenAnswer(i -> spyCard.getPinCode().equals(TestUtil.getHash("5678")));
         boolean isChangedPin = cashMachineService.changePin("5410501","1234","5678");
 
         assertEquals(spyCard.getPinCode(), TestUtil.getHash("5678"), "Ошибка изменения пин кода");

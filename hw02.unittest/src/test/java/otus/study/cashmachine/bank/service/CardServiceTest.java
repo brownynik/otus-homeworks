@@ -89,9 +89,6 @@ public class CardServiceTest {
         verify(accountService, only()).putMoney(anyLong(), any());
         assertEquals(BigDecimal.valueOf(2000), amountCaptor.getValue());
         assertEquals(10L, idCardCaptor.getValue().longValue());
-
-        // System.out.println("idCardCaptor = " + idCardCaptor.getValue());
-        // System.out.println("amountCaptor = " + amountCaptor.getValue());
     }
 
     @Test
@@ -120,8 +117,5 @@ public class CardServiceTest {
             cardService.cnangePin(null, "1234", "5678");
         });
         assertEquals(thrown.getMessage(), "No card found");
-
-        // System.out.println("isChangedPin = " + isChangedPin);
-        // System.out.println("CardCaptor.getValue().getPinCode() = " + CardCaptor.getValue().getPinCode().equals(TestUtil.getHash("5678")));
     }
 }
