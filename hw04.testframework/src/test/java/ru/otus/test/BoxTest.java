@@ -27,7 +27,7 @@ public class BoxTest {
     Box<Apple> appleBoxSecond;
 
     @Before
-    void initAllBoxes() {
+    private void initAllBoxes() {
         orangeBox = new Box<>();
         appleBox = new Box<>();
         fruitBox = new Box<>();
@@ -46,7 +46,7 @@ public class BoxTest {
     }
 
     @After
-    void displayDurationInfo() {
+    private void displayDurationInfo() {
         long duration = System.currentTimeMillis() - startTime;
         System.out.println("Duration = " + String.valueOf(duration));
     }
